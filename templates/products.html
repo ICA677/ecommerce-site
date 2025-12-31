@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block content %}
+<h2>产品列表</h2>
+{% for product in products %}
+<div>
+  <h3>{{ product.name }}</h3>
+  <p>{{ product.description }}</p>
+  <p>价格: {{ product.price }}</p>
+  <form
+    action="{{ url_for('add_to_cart', product_id=product.id) }}"
+    method="post"
+  >
+    <input type="number" name="quantity" value="1" min="1" />
+    <button type="submit">添加至购物车</button>
+  </form>
+</div>
+{% endfor %} {% endblock %}

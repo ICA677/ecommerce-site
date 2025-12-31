@@ -1,0 +1,23 @@
+<!-- templates/user_center.html -->
+{% extends "base.html" %}
+
+{% block title %}用户中心 - 电商网站{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4>用户中心</h4>
+                </div>
+                <div class="card-body">
+                    <p>欢迎回来，<strong>{{ current_user.username }}</strong>！</p>
+                    <p>在这里你可以查看订单、收藏商品、管理个人信息。</p>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">退出登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

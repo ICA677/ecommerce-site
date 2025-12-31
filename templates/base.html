@@ -1,0 +1,131 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}电商网站{% endblock %}</title>
+
+    <!-- 引用本地 Bootstrap CSS -->
+    <link
+      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .navbar-brand {
+        font-weight: bold;
+        color: #007bff !important;
+      }
+      .nav-link {
+        color: #333 !important;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">电商网站</a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}">首页</a>
+            </li>
+            {% if current_user.is_authenticated and current_user.is_admin %}
+            <li class="nav-item">
+              <a
+                class="nav-link text-danger fw-bold"
+                href="{{ url_for('admin') }}"
+                >管理后台</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+
+          <!-- 右侧用户区域 -->
+          {% if current_user.is_authenticated %}
+          <div class="d-flex align-items-center ms-3">
+            <span class="navbar-text me-2"
+              >欢迎, {{ current_user.username }}!</span
+            >
+            <a
+              href="{{ url_for('profile') }}"
+              class="btn btn-outline-primary btn-sm me-2"
+              >用户中心</a
+            >
+            <a
+              href="{{ url_for('cart') }}"
+              class="btn btn-outline-primary btn-sm position-relative me-2"
+            >
+              🛒 购物车 {% if current_user.is_authenticated %} {% set cart_count
+              = current_user.cart_items | sum(attribute='quantity') %} {% if
+              cart_count > 0 %}
+              <span
+                class="badge bg-danger rounded-pill"
+                style="
+                  position: absolute;
+                  top: -8px;
+                  right: -8px;
+                  font-size: 0.7em;
+                "
+              >
+                {{ cart_count }}
+              </span>
+              {% endif %} {% endif %}
+            </a>
+            <a
+              href="{{ url_for('logout') }}"
+              class="btn btn-outline-danger btn-sm"
+              >登出</a
+            >
+          </div>
+          {% else %}
+          <div class="d-flex align-items-center ms-3">
+            <a
+              href="{{ url_for('login') }}"
+              class="btn btn-outline-primary btn-sm me-2"
+              >登录</a
+            >
+            <a
+              href="{{ url_for('register') }}"
+              class="btn btn-outline-secondary btn-sm"
+              >注册</a
+            >
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ 'success' if category == 'success' else 'danger' }}"
+      >
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %} {% endblock %}
+    </div>
+
+    <!-- 引用本地 Bootstrap JS -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+  </body>
+</html>

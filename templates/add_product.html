@@ -1,0 +1,38 @@
+<!-- templates/add_product.html -->
+{% extends "base.html" %}
+
+{% block title %}添加商品 - 管理后台{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>添加新商品</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control", placeholder="如：iPhone 15") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control", rows=4, placeholder="请输入商品详情...") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.price.label(class="form-label") }}
+            {{ form.price(class="form-control", placeholder="如：5999.00") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.image.label(class="form-label") }}
+            {{ form.image(class="form-control") }}
+        </div>
+
+        <div class="d-flex gap-2">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('admin') }}" class="btn btn-secondary">返回</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

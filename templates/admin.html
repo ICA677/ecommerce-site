@@ -1,0 +1,95 @@
+<!-- templates/admin.html -->
+{% extends "base.html" %} {% block title %}管理后台 - 电商网站{% endblock %} {%
+block content %}
+<div class="container mt-4">
+  <h2>管理后台</h2>
+
+  <div class="alert alert-success">
+    <strong>欢迎，管理员 {{ current_user.username }}！</strong><br />
+    这里是管理后台，可以添加商品、管理用户等。
+  </div>
+
+  <!-- 新增：添加商品按钮 -->
+  <div class="mb-3">
+    <a href="{{ url_for('add_product') }}" class="btn btn-success"
+      >+ 添加商品</a
+    >
+  </div>
+
+  <!-- 用户列表 -->
+  <h4>用户列表</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th>邮箱</th>
+        <th>是否管理员</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.is_admin }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- 商品列表 -->
+  <h4>商品列表</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>价格</th>
+        <th>图片</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>¥{{ product.price }}</td>
+        <td>
+          {% if product.image_url %}
+          <img
+            src="{{ url_for('static', filename=product.image_url) }}"
+            width="50"
+          />
+          {% else %} 无图 {% endif %}
+        </td>
+        <td>
+          <!-- 编辑按钮 -->
+          <a
+            href="{{ url_for('edit_product', id=product.id) }}"
+            class="btn btn-sm btn-warning"
+            >编辑</a
+          >
+          <!-- 删除按钮 -->
+          <form
+            action="{{ url_for('delete_product', id=product.id) }}"
+            method="POST"
+            style="display: inline"
+          >
+            <button
+              type="submit"
+              onclick="return confirm('确定要删除吗？')"
+              class="btn btn-sm btn-danger"
+            >
+              删除
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{{ url_for('logout') }}" class="btn btn-danger">退出管理</a>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+<!-- templates/cart.html -->
+{% extends "base.html" %} {% block title %}我的购物车{% endblock %} {% block
+content %}
+<div class="container mt-4">
+  <h2>🛒 我的购物车</h2>
+
+  {% if items %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>商品</th>
+        <th>单价</th>
+        <th>数量</th>
+        <th>小计</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>
+          <img
+            src="{{ url_for('static', filename=item.product.image_url) }}"
+            width="50"
+            class="me-2"
+          />
+          {{ item.product.name }}
+        </td>
+        <td>¥{{ item.product.price }}</td>
+        <td>
+          <form
+            method="POST"
+            action="{{ url_for('update_cart', item_id=item.id) }}"
+            style="display: inline"
+          >
+            <input
+              type="number"
+              name="quantity"
+              value="{{ item.quantity }}"
+              min="1"
+              max="99"
+              style="width: 60px"
+              onchange="this.form.submit()"
+            />
+          </form>
+        </td>
+        <td>¥{{ (item.product.price * item.quantity) | round(2) }}</td>
+        <td>
+          <a
+            href="{{ url_for('remove_from_cart', item_id=item.id) }}"
+            class="btn btn-sm btn-outline-danger"
+            onclick="return confirm('确定要删除吗？')"
+            >删除</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h4>总计：¥{{ total | round(2) }}</h4>
+    <form method="POST" action="{{ url_for('checkout') }}">
+      <button type="submit" class="btn btn-success btn-lg">去结算</button>
+    </form>
+  </div>
+
+  {% else %}
+  <div class="alert alert-info">
+    购物车是空的<br />
+    <a href="{{ url_for('index') }}">去逛逛商品吧</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

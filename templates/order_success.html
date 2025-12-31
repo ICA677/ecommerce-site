@@ -1,0 +1,28 @@
+<!-- templates/order_success.html -->
+{% extends "base.html" %}
+
+{% block title %}订单成功 - 电商网站{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="text-center">
+        <h2>🎉 订单提交成功！</h2>
+        <p class="lead">感谢您的购买！</p>
+
+        <div class="card mx-auto" style="max-width: 500px;">
+            <div class="card-body">
+                <h5>订单详情</h5>
+                <p>订单号：<strong>{{ order.id }}</strong></p>
+                <p>下单时间：<strong>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</strong></p>
+                <p>总金额：<strong class="text-success">¥{{ order.total_price | round(2) }}</strong></p>
+                <p>状态：<span class="badge bg-warning">{{ order.status }}</span></p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">继续购物</a>
+            <!-- 后续可加：查看我的订单 -->
+        </div>
+    </div>
+</div>
+{% endblock %}
